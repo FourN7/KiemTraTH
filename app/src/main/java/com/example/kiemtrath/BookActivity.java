@@ -120,10 +120,38 @@ public class BookActivity extends AppCompatActivity {
         }
     }
     private  void  update(){
-
+        String id = editTextID.getText().toString();
+        String name = editTextName.getText().toString();
+        String author = editTextGrade.getText().toString();
+        if (id.isEmpty()) {
+            Toast.makeText(BookActivity.this, "Chưa nhập id", Toast.LENGTH_LONG).show();
+        } else if (name.isEmpty()) {
+            Toast.makeText(BookActivity.this, "Chưa nhập name", Toast.LENGTH_LONG).show();
+        } else if (author.isEmpty()) {
+            Toast.makeText(BookActivity.this, "Chưa nhập grade", Toast.LENGTH_LONG).show();
+        } else {
+            ContentResolver contentResolver = getContentResolver();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("id", id);
+            contentValues.put("name", name);
+            contentValues.put("author", author);
+            String whereClause = "id = ?";
+            String whereClauseArgs[] = {id};
+            int updateCount = contentResolver.update(CONTENT_URI, contentValues, whereClause, whereClauseArgs);
+            if (updateCount > 0) {
+                Toast.makeText(BookActivity.this, "Cập nhật thành công " + updateCount, Toast.LENGTH_LONG).show();
+            }
+            getAll();
+        }
 
     }
     private  void delete(){
-
+        String id = editTextID.getText().toString();
+        ContentResolver contentResolver = getContentResolver();
+        String whereClause = "id = ?";
+        String whereClauseArgs[] = {id};
+        int deleteCount = contentResolver.delete(CONTENT_URI, whereClause, whereClauseArgs);
+        Toast.makeText(getApplicationContext(), "Xóa thành công " + deleteCount, Toast.LENGTH_LONG).show();
+        getAll();
     }
 }
